@@ -1,6 +1,6 @@
 import numpy as np
 from controller import controller
-from trajectory import trajectory
+from trajectory import spiral, figure_of_8
 from qcutils import *
 from crazyflie import crazyflie
 
@@ -9,7 +9,7 @@ def quadEOM (t, s):
     params = crazyflie()
     s = np.transpose(np.float32([s]))
     qd = stateToQd(np.transpose(s));
-    desired_state = trajectory(t);
+    desired_state = spiral(t);
     qd.pos_des      = desired_state.pos;
     qd.vel_des      = desired_state.vel;
     qd.acc_des      = desired_state.acc;
