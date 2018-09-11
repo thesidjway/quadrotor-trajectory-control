@@ -1,2 +1,2 @@
 # quadrotor-trajectory-control
-Quadrotor Trajectory Control
+Simplistic python implementation of a PD attitude control and trajectory control algorithm. Port of https://github.com/stormmax/quadrotor
