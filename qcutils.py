@@ -1,6 +1,18 @@
 import numpy as np
 import math
 
+class Qd:
+    pos = np.zeros((3,1), dtype=float)
+    vel = np.zeros((3,1), dtype=float)
+    euler = np.zeros((3,1), dtype=float)
+    omega = np.zeros((3,1), dtype=float)
+    pos_des = np.zeros((3,1), dtype=float)
+    vel_des = np.zeros((3,1), dtype=float)
+    acc_des = np.zeros((3,1), dtype=float)
+    yaw_des = np.zeros((3,1), dtype=float)
+    yawdot_des = np.zeros((3,1), dtype=float)
+
+
 def init_state( start, yaw ):
     s = np.zeros((13, 1), dtype=float)
     phi0   = 0.0;
@@ -25,22 +37,24 @@ def init_state( start, yaw ):
 
 def qdToState(qd):
     x = np.zeros((1,13), dtype=float);
-    x[0:3] = qd.pos;
-    x[3:6] = qd.vel;
+    x[0,0:3] = np.transpose(qd.pos);
+    x[0,3:6] =  np.transpose(qd.vel);
     Rot = RPYtoRot_ZXY(qd.euler[0], qd.euler[1], qd.euler[2]);
     quat = RotToQuat(Rot);
-    x[6:10] = quat;
-    x[10:13] = qd.omega;
+    x[0,6:10] = quat;
+    x[0,10:13] = np.transpose(qd.omega);
     return x;
 
 def stateToQd(x):
-    qd = qd()
-    qd.pos = x[0,0:3]
-    qd.vel = x[0,3:6]
-    Rot = QuatToRot(x[0,7:10]);
+    qd = Qd()
+
+    qd.pos = np.float32([[x[0,0]], [x[0,1]], [x[0,2]]]);
+    qd.vel = np.float32([[x[0,3]], [x[0,4]], [x[0,5]]]);
+    Rot = QuatToRot(x[0,6:10]);
     [phi,theta,yaw] = RotToRPY_ZXY(Rot)
-    qd.euler = [[phi], [theta], [yaw]];
-    qd.omega = x[10:13]
+    qd.euler = np.float32([[phi], [theta], [yaw]]);
+    qd.omega = np.float32([[x[0,10]], [x[0, 11]], [x[0, 12]]]);
+    return qd
 
 
 def QuatToRot(q):
