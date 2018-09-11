@@ -19,7 +19,7 @@ def tj_from_line(start_pos, end_pos, time_ttl, t_c):
     return pos, vel, acc
 
 def pos_from_angle(a,radius):
-    pos = np.float32([[radius*math.cos(a)],[radius*math.sin(a)],[2.5*a/(2*np.pi)]]);
+    pos = np.float64([[radius*math.cos(a)],[radius*math.sin(a)],[2.5*a/(2*np.pi)]]);
     return pos
 
 def get_vel(t, time_tol, radius, dt):
@@ -45,9 +45,9 @@ def trajectory(t):
         vel = get_vel(t, time_tol, radius, dt);
         acc = (get_vel(t+dt, time_tol, radius, dt) - get_vel(t, time_tol, radius, dt))/dt;
 
-    print "getvel1", get_vel(t+dt, time_tol, radius, dt)
-    print "getvel2", get_vel(t, time_tol, radius, dt)
-    print "accdada", acc
+    a2 = tj_from_line(0, 2*np.pi, time_tol, t+2*dt);
+    a1 = tj_from_line(0, 2*np.pi, time_tol, t+dt);
+    a0 = tj_from_line(0, 2*np.pi, time_tol, t);
 
     yaw = 0;
     yawdot = 0;
